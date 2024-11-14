@@ -1,6 +1,12 @@
 from werkzeug.datastructures import FileStorage
 
+
 def classify_file(file: FileStorage):
+    """
+    file classification logic
+    # * Initially simple rule-based
+    # ! Make more robust - add in more rules and classification based on file content
+    """
     filename = file.filename.lower()
     # file_bytes = file.read()
 
@@ -14,4 +20,3 @@ def classify_file(file: FileStorage):
         return "invoice"
 
     return "unknown file"
-
