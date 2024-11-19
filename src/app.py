@@ -3,7 +3,7 @@
 from flask import Flask, request, jsonify
 
 from src.classifier import classify_file
-import src.constants as constants
+from src.constants import ALLOWED_EXTENSIONS
 
 app = Flask(__name__)
 
@@ -12,10 +12,7 @@ def allowed_file(filename):
     """
     checks if a file name has a valid extension
     """
-    return (
-        "." in filename
-        and filename.rsplit(".", 1)[1].lower() in constants.ALLOWED_EXTENSIONS
-    )
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route("/classify_file", methods=["POST"])
