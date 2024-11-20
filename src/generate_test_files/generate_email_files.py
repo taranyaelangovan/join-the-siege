@@ -1,6 +1,8 @@
 from faker import Faker
 import random
 import os
+from faker_file.providers.docx_file import DocxFileProvider
+from faker_file.storages.filesystem import FileSystemStorage
 
 
 def generate_email_message(faker):
@@ -35,15 +37,10 @@ Dear {receiver}
     return email_contents
 
 
-if __name__ == "__main__":
+def create_email_files(faker, num_emails_to_generate=10):
 
-    faker = Faker()
-
-    print(generate_email_message(faker))
-
-    num_emails_to_generate = 10
     email_extns = [".msg", ".eml", ".txt"]
-    email_output_directory = "files\emails"
+    email_output_directory = r"files\emails"
 
     for i in range(0, num_emails_to_generate):
         email = generate_email_message(faker)
@@ -53,3 +50,28 @@ if __name__ == "__main__":
         ) + random.choice(email_extns)
         with open(email_save_path, "w") as f:
             f.write(email)
+
+
+def generate_word_document(faker):
+    faker.docx_file(
+        storage=FileSystemStorage(
+            root_path=os.getcwd(), rel_path=r"files\word_documents", prefix="doc"
+        )
+    )
+
+
+def create_word_files(faker, num_files=10):
+    for i in range(0, num_files):
+        generate_word_document(faker)
+
+
+if __name__ == "__main__":
+
+    faker = Faker()
+    faker.add_provider(DocxFileProvider)
+
+    create_word_files(faker, 5)
+
+    #! Generate different types of word files based on different templates
+    #! Generate Excel files
+    #! General PPTX files
