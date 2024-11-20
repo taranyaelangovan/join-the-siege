@@ -1,6 +1,7 @@
 from werkzeug.datastructures import FileStorage
 from src.constants import FILE_TYPE_VARIATIONS
 from jellyfish import jaro_winkler_similarity
+import os
 
 
 def check_substring(search_string, search_list):
@@ -43,8 +44,13 @@ def classify_file(file: FileStorage):
     # * Initially simple rule-based
     # ! Make more robust - add in more rules and classification based on file content
     """
-
+    file_extn = os.path.splitext(file.filename)[1]
     filename_cleaned = clean_filename(file.filename)
+
+    # Pass 0: Check Extension
+    for key in FILE_TYPE_VARIATIONS:
+        if file_extn in FILE_TYPE_VARIATIONS[key]:
+            return key
 
     # Pass 1: Checks if any of the accepted file type variation strings are a substring of the filename
     for key in FILE_TYPE_VARIATIONS:
