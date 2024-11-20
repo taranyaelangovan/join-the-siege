@@ -46,10 +46,12 @@ def classify_file(file: FileStorage):
 
     filename_cleaned = clean_filename(file.filename)
 
+    # Pass 1: Checks if any of the accepted file type variation strings are a substring of the filename
     for key in FILE_TYPE_VARIATIONS:
         if check_substring(filename_cleaned, FILE_TYPE_VARIATIONS[key]):
             return key
 
+    # Pass 2: If not classified in Pass 1, checks if any of the accepted file type variation strings are similar to (JW distance > 0.85) a substring of the filename
     for key in FILE_TYPE_VARIATIONS:
         if check_similar_substring(filename_cleaned, FILE_TYPE_VARIATIONS[key]):
             return key
