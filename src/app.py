@@ -3,12 +3,9 @@
 from flask import Flask, request, jsonify
 
 from src.classifier import classify_file
+from src.constants import ALLOWED_EXTENSIONS
 
 app = Flask(__name__)
-
-# Valid file extensions
-# ! Add extensions here to allow further file classification
-ALLOWED_EXTENSIONS = {"pdf", "png", "jpg"}
 
 
 def allowed_file(filename):
