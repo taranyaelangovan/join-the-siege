@@ -5,7 +5,9 @@ import docx
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 
-def generate_academic_report(faker, mask_type=0):
+def generate_academic_report(
+    faker, save_dir=r"files\synthesised_word_documents", mask_type=0
+):
 
     report = docx.Document()
 
@@ -68,12 +70,13 @@ def generate_academic_report(faker, mask_type=0):
         prefix = "academic_report"
     else:
         prefix = "document"
-    report.save(
-        rf"files\synthesised_word_documents\{prefix}_{faker.random_number()}.docx"
-    )
+    print(rf"{save_dir}\{prefix}_{faker.random_number()}.docx")
+    report.save(rf"{save_dir}\{prefix}_{faker.random_number()}.docx")
 
 
-def generate_business_report(faker, mask_type=0):
+def generate_business_report(
+    faker, save_dir=r"files\synthesised_word_documents", mask_type=0
+):
 
     report = docx.Document()
 
@@ -146,12 +149,12 @@ def generate_business_report(faker, mask_type=0):
         prefix = "business_report"
     else:
         prefix = "document"
-    report.save(
-        rf"files\synthesised_word_documents\{prefix}_{faker.random_number()}.docx"
-    )
+    report.save(rf"{save_dir}\{prefix}_{faker.random_number()}.docx")
 
 
-def generate_formal_letter(faker, mask_type=0):
+def generate_formal_letter(
+    faker, save_dir=r"files\synthesised_word_documents", mask_type=0
+):
 
     letter = docx.Document()
 
@@ -201,29 +204,33 @@ Yours Sincerely,
         prefix = "formal_letter"
     else:
         prefix = "document"
-    letter.save(
-        rf"files\synthesised_word_documents\{prefix}_{faker.random_number()}.docx"
-    )
+
+    letter.save(rf"{save_dir}\{prefix}_{faker.random_number()}.docx")
 
 
-def create_reports(faker, doc_type="", num=1, mask_type=0):
+def create_reports(
+    faker, doc_type="", save_dir=r"files\synthesised_word_documents", num=1, mask_type=0
+):
     if doc_type == "academic_report":
         for i in range(0, num):
-            generate_academic_report(faker, mask_type)
+            generate_academic_report(faker, save_dir=save_dir, mask_type=mask_type)
     if doc_type == "business_report":
         for i in range(0, num):
-            generate_business_report(faker, mask_type)
+            generate_business_report(faker, save_dir=save_dir, mask_type=mask_type)
     if doc_type == "formal_letter":
         for i in range(0, num):
-            generate_formal_letter(faker, mask_type)
+            generate_formal_letter(faker, save_dir=save_dir, mask_type=mask_type)
 
 
 if __name__ == "__main__":
 
     faker = Faker()
-    create_reports(faker, "academic_report", 2)
-    create_reports(faker, "business_report", 2)
-    create_reports(faker, "formal_letter", 2)
-    create_reports(faker, "academic_report", 2, 1)
-    create_reports(faker, "business_report", 2, 1)
-    create_reports(faker, "formal_letter", 2, 1)
+
+    create_reports(faker, doc_type="academic_report", num=2)
+    create_reports(faker, doc_type="business_report", num=2)
+    create_reports(faker, doc_type="formal_letter", num=2)
+    create_reports(faker, doc_type="academic_report", num=2, mask_type=1)
+    create_reports(faker, doc_type="business_report", num=2, mask_type=1)
+    create_reports(faker, doc_type="formal_letter", num=2, mask_type=1)
+
+    # create_reports(faker, doc_type="formal_letter", save_dir="files",num=2, mask_type=1)
