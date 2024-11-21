@@ -18,8 +18,14 @@ def client():
         ("file.pdf", True),
         ("file.png", True),
         ("file.jpg", True),
-        ("file.txt", False),
+        ("file.txt", True),
+        ("file.msg", True),
+        ("file.eml", True),
+        ("file.docx", True),
         ("file", False),
+        ("file.xlsx", False),
+        ("file.pptx", False),
+        ("file.html", False),
     ],
 )
 def test_allowed_file(filename, expected):
