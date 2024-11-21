@@ -1,6 +1,7 @@
 from faker import Faker
 import random
 import os
+import pathlib
 import docx
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
@@ -70,7 +71,7 @@ def generate_academic_report(
         prefix = "academic_report"
     else:
         prefix = "document"
-    print(rf"{save_dir}\{prefix}_{faker.random_number()}.docx")
+
     report.save(rf"{save_dir}\{prefix}_{faker.random_number()}.docx")
 
 
@@ -149,6 +150,7 @@ def generate_business_report(
         prefix = "business_report"
     else:
         prefix = "document"
+
     report.save(rf"{save_dir}\{prefix}_{faker.random_number()}.docx")
 
 
@@ -226,11 +228,45 @@ if __name__ == "__main__":
 
     faker = Faker()
 
-    create_reports(faker, doc_type="academic_report", num=2)
-    create_reports(faker, doc_type="business_report", num=2)
-    create_reports(faker, doc_type="formal_letter", num=2)
-    create_reports(faker, doc_type="academic_report", num=2, mask_type=1)
-    create_reports(faker, doc_type="business_report", num=2, mask_type=1)
-    create_reports(faker, doc_type="formal_letter", num=2, mask_type=1)
+    # create_reports(faker, doc_type="academic_report", num=2)
+    # create_reports(faker, doc_type="business_report", num=2)
+    # create_reports(faker, doc_type="formal_letter", num=2)
+    # create_reports(faker, doc_type="academic_report", num=2, mask_type=1)
+    # create_reports(faker, doc_type="business_report", num=2, mask_type=1)
+    # create_reports(faker, doc_type="formal_letter", num=2, mask_type=1)
 
     # create_reports(faker, doc_type="formal_letter", save_dir="files",num=2, mask_type=1)
+
+    # to create model training data
+
+    acad_rep_output_dir = r"files\synthesised_training_data\acad_rep_docx"
+    bus_rep_output_dir = r"files\synthesised_training_data\bus_rep_docx"
+    letter_output_dir = r"files\synthesised_training_data\fml_let_docx"
+
+    pathlib.Path(acad_rep_output_dir).mkdir(parents=True, exist_ok=True)
+    pathlib.Path(bus_rep_output_dir).mkdir(parents=True, exist_ok=True)
+    pathlib.Path(letter_output_dir).mkdir(parents=True, exist_ok=True)
+
+    num_files = 250
+
+    create_reports(
+        faker,
+        doc_type="academic_report",
+        save_dir=acad_rep_output_dir,
+        num=num_files,
+        mask_type=1,
+    )
+    create_reports(
+        faker,
+        doc_type="business_report",
+        save_dir=bus_rep_output_dir,
+        num=num_files,
+        mask_type=1,
+    )
+    create_reports(
+        faker,
+        doc_type="formal_letter",
+        save_dir=letter_output_dir,
+        num=num_files,
+        mask_type=1,
+    )

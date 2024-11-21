@@ -1,6 +1,7 @@
 from faker import Faker
 import random
 import os
+import pathlib
 
 
 def generate_email_message(faker):
@@ -37,12 +38,15 @@ Dear {receiver}
 
 def create_email_files(
     faker,
+    txt_only=0,
     email_output_directory=r"files\synthesised_emails",
     num_emails_to_generate=10,
     mask_flag=0,
 ):
-
-    email_extns = [".msg", ".eml", ".txt"]
+    if txt_only == 0:
+        email_extns = [".txt"]
+    else:
+        email_extns = [".msg", ".eml", ".txt"]
 
     for i in range(0, num_emails_to_generate):
         email = generate_email_message(faker)
@@ -68,3 +72,17 @@ if __name__ == "__main__":
     create_email_files(faker, 5)
 
     # create_email_files(faker, "files", 5, 1)
+
+    # to create test files
+
+    email_output_dir = r"files\synthesised_training_data\eml_txt"
+    pathlib.Path(email_output_dir).mkdir(parents=True, exist_ok=True)
+
+    num_files = 250
+
+    create_email_files(
+        faker,
+        email_output_directory=email_output_dir,
+        num_emails_to_generate=num_files,
+        mask_flag=1,
+    )

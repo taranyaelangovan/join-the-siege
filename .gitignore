@@ -4,3 +4,4 @@ venv
 .vscode
 __pycache__
 *.pyc
+files/synthesised_training_data/*
