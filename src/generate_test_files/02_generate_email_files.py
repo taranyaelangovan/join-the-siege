@@ -35,17 +35,24 @@ Dear {receiver}
     return email_contents
 
 
-def create_email_files(faker, num_emails_to_generate=10):
+def create_email_files(faker, num_emails_to_generate=10, mask_flag=0):
 
     email_extns = [".msg", ".eml", ".txt"]
     email_output_directory = r"files\synthesised_emails"
 
     for i in range(0, num_emails_to_generate):
         email = generate_email_message(faker)
-        email_filename = f"email_{faker.random_number()}"
+
+        if mask_flag == 0:
+            prefix = "email"
+        else:
+            prefix = "file"
+
+        email_filename = f"{prefix}_{faker.random_number()}"
         email_save_path = os.path.join(
             email_output_directory, email_filename
         ) + random.choice(email_extns)
+
         with open(email_save_path, "w") as f:
             f.write(email)
 
@@ -54,4 +61,5 @@ if __name__ == "__main__":
 
     faker = Faker()
 
-    create_email_files(faker, 5)
+    # create_email_files(faker, 5)
+    create_email_files(faker, 5, 1)
