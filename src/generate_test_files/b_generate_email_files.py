@@ -69,16 +69,30 @@ if __name__ == "__main__":
 
     faker = Faker()
 
-    create_email_files(faker, 5)
+    # 1. creating files and saving to files/synthesised_emails/
 
-    # create_email_files(faker, "files", 5, 1)
+    # create_email_files(faker, 5)
 
-    # to create test files
+    # 2. creating training data and saving to files/synthesised_training_data/eml_txt/
 
-    email_output_dir = r"files\synthesised_training_data\eml_txt"
+    # email_output_dir = r"files\synthesised_training_data\eml_txt"
+    # pathlib.Path(email_output_dir).mkdir(parents=True, exist_ok=True)
+
+    # num_files = 250
+
+    # create_email_files(
+    #     faker,
+    #     email_output_directory=email_output_dir,
+    #     num_emails_to_generate=num_files,
+    #     mask_flag=1,
+    # )
+
+    # 3. creating testing data to be used for predicton and saving to files/synthesised_test_data/eml_test_files
+
+    email_output_dir = r"files\synthesised_test_data\eml_test_files"
     pathlib.Path(email_output_dir).mkdir(parents=True, exist_ok=True)
 
-    num_files = 250
+    num_files = 10
 
     create_email_files(
         faker,

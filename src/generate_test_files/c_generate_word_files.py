@@ -228,6 +228,8 @@ if __name__ == "__main__":
 
     faker = Faker()
 
+    # 1. creating files and saving to files/x/
+
     # create_reports(faker, doc_type="academic_report", num=2)
     # create_reports(faker, doc_type="business_report", num=2)
     # create_reports(faker, doc_type="formal_letter", num=2)
@@ -237,17 +239,51 @@ if __name__ == "__main__":
 
     # create_reports(faker, doc_type="formal_letter", save_dir="files",num=2, mask_type=1)
 
-    # to create model training data
+    # 2. creating training data and saving to files/synthesised_training_data/x/
 
-    acad_rep_output_dir = r"files\synthesised_training_data\acad_rep_docx"
-    bus_rep_output_dir = r"files\synthesised_training_data\bus_rep_docx"
-    letter_output_dir = r"files\synthesised_training_data\fml_let_docx"
+    # acad_rep_output_dir = r"files\synthesised_training_data\acad_rep_docx"
+    # bus_rep_output_dir = r"files\synthesised_training_data\bus_rep_docx"
+    # letter_output_dir = r"files\synthesised_training_data\fml_let_docx"
+
+    # pathlib.Path(acad_rep_output_dir).mkdir(parents=True, exist_ok=True)
+    # pathlib.Path(bus_rep_output_dir).mkdir(parents=True, exist_ok=True)
+    # pathlib.Path(letter_output_dir).mkdir(parents=True, exist_ok=True)
+
+    # num_files = 250
+
+    # create_reports(
+    #     faker,
+    #     doc_type="academic_report",
+    #     save_dir=acad_rep_output_dir,
+    #     num=num_files,
+    #     mask_type=1,
+    # )
+    # create_reports(
+    #     faker,
+    #     doc_type="business_report",
+    #     save_dir=bus_rep_output_dir,
+    #     num=num_files,
+    #     mask_type=1,
+    # )
+    # create_reports(
+    #     faker,
+    #     doc_type="formal_letter",
+    #     save_dir=letter_output_dir,
+    #     num=num_files,
+    #     mask_type=1,
+    # )
+
+    # 3. creating testing data to be used for predicton and saving to files/synthesised_test_data/x
+
+    acad_rep_output_dir = r"files\synthesised_test_data\acad_rep_test_docx"
+    bus_rep_output_dir = r"files\synthesised_test_data\bus_rep_test_docx"
+    letter_output_dir = r"files\synthesised_test_data\fml_let_test_docx"
 
     pathlib.Path(acad_rep_output_dir).mkdir(parents=True, exist_ok=True)
     pathlib.Path(bus_rep_output_dir).mkdir(parents=True, exist_ok=True)
     pathlib.Path(letter_output_dir).mkdir(parents=True, exist_ok=True)
 
-    num_files = 250
+    num_files = 10
 
     create_reports(
         faker,
