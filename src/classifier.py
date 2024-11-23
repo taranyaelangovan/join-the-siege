@@ -2,6 +2,9 @@ from werkzeug.datastructures import FileStorage
 from src.constants import FILE_TYPE_VARIATIONS
 from jellyfish import jaro_winkler_similarity
 import os
+import docx
+from sklearn.feature_extraction.text import TfidfVectorizer
+import pickle
 
 
 def check_substring(search_string, search_list):
@@ -38,6 +41,30 @@ def clean_filename(filename: str = ""):
     return filename_cleaned
 
 
+def classify_file_by_contents(file: FileStorage):
+
+    print(file.filename)
+    if file.filename.endswith(".txt"):
+        file_contents = file.stream.read()
+    if file.filename.endswith(".docx"):
+        doc = docx.Document(file)
+        word_text = "\n".join([p.text for p in doc.paragraphs])
+        file_contents = word_text
+
+    tfidf_vect = pickle.load(open(r"files/trained_models/tfidf_vectoriser.sav", "rb"))
+    predict_file_tfidf = tfidf_vect.transform([file_contents])
+
+    lr_regression = pickle.load(
+        open(r"files/trained_models/logistic_regression_acc_97_3.sav", "rb")
+    )
+    encoded_prediction = lr_regression.predict(predict_file_tfidf)
+
+    encoding_map = pickle.load(open(r"files/trained_models/encoding_map.sav", "rb"))
+    prediction = encoding_map[encoded_prediction[0]]
+
+    return prediction
+
+
 def classify_file(file: FileStorage):
     """
     file classification logic
@@ -64,5 +91,7 @@ def classify_file(file: FileStorage):
 
     # ! Add in handling for files that have not already been classified - check here for file contents if not already categorised based on name
     # file_bytes = file.read()
+    if file_extn in [".docx", ".txt"]:
+        return classify_file_by_contents(file)
 
     return "unknown file"
