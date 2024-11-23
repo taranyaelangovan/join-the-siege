@@ -3,7 +3,6 @@ from src.constants import FILE_TYPE_VARIATIONS
 from jellyfish import jaro_winkler_similarity
 import os
 import docx
-from sklearn.feature_extraction.text import TfidfVectorizer
 import pickle
 
 
@@ -34,15 +33,14 @@ def clean_filename(filename: str = ""):
     """
     cleans filename to remove any spaces/underscores/hyphens, and converts to lowercase
     """
-    # filename_cleaned = (
-    #     filename.replace(" ", "").replace("_", "").replace("-", "").lower()
-    # )
     filename_cleaned = "".join(x for x in filename if x.isalpha())
     return filename_cleaned
 
 
 def classify_file_by_contents(file: FileStorage):
-
+    """
+    classify file using trained Logistic Regression model
+    """
     print(file.filename)
     if file.filename.endswith(".txt"):
         file_contents = file.stream.read()
@@ -68,29 +66,30 @@ def classify_file_by_contents(file: FileStorage):
 def classify_file(file: FileStorage):
     """
     file classification logic
-    # * Initially simple rule-based
-    # ! Make more robust - add in more rules and classification based on file content
+    Pass 1: Checks file extension
+    Pass 2: Checks file name for valid identifying substrings
+    Pass 3: Checks if file name has a high similarity with any valid identifying substring
+    Pass 4: If file is .docx/.txt, loads its contents and uses Logistic Regression to predict its type
     """
     file_extn = os.path.splitext(file.filename)[1]
     filename_cleaned = clean_filename(file.filename)
 
-    # Pass 0: Check Extension
+    # Pass 1: Check Extension
     for key in FILE_TYPE_VARIATIONS:
         if file_extn in FILE_TYPE_VARIATIONS[key]:
             return key
 
-    # Pass 1: Checks if any of the accepted file type variation strings are a substring of the filename
+    # Pass 2: Checks if any of the accepted file type variation strings are a substring of the filename
     for key in FILE_TYPE_VARIATIONS:
         if check_substring(filename_cleaned, FILE_TYPE_VARIATIONS[key]):
             return key
 
-    # Pass 2: If not classified in Pass 1, checks if any of the accepted file type variation strings are similar to (JW distance > 0.85) a substring of the filename
+    # Pass 3: If not classified in Pass 2, checks if any of the accepted file type variation strings are similar to (JW distance > 0.85) a substring of the filename
     for key in FILE_TYPE_VARIATIONS:
         if check_similar_substring(filename_cleaned, FILE_TYPE_VARIATIONS[key]):
             return key
 
-    # ! Add in handling for files that have not already been classified - check here for file contents if not already categorised based on name
-    # file_bytes = file.read()
+    # Pass 4: If not classified in Passes 1 or 2, gets the contents of a file if it is either a .txt or .docx file, and predicts its type using the trained Logistic Regression model saved
     if file_extn in [".docx", ".txt"]:
         return classify_file_by_contents(file)
 
